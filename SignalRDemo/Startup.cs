@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Owin;
@@ -17,30 +19,21 @@ namespace SignalRDemo
         {
             var builder = new ContainerBuilder();
 
-            // STANDARD WEB API SETUP:
-
-            // Get your HttpConfiguration. In OWIN, you'll create one
-            // rather than using GlobalConfiguration.
-            var config = new HttpConfiguration();
-
-            // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
+            builder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>().SingleInstance();
             builder.RegisterType<ConnectionManager>().As<IConnectionManager>().SingleInstance();
 
-            // Run other optional steps, like registering filters,
-            // per-controller-type services, etc., then set the dependency resolver
-            // to be Autofac.
             var container = builder.Build();
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-            // OWIN WEB API SETUP:
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
             // and finally the standard Web API middleware.
             app.UseAutofacMiddleware(container);
-            app.UseAutofacWebApi(config);
-            app.UseWebApi(config);
+            //app.UseAutofacWebApi(config);
+            //app.UseWebApi(config);
         }
     }
 }
