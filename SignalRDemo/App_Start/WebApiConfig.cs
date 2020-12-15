@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace SignalRDemo
 {
@@ -6,8 +7,9 @@ namespace SignalRDemo
     {
         public static void Register(HttpConfiguration config)
         {
-            config.EnableCors();
-            
+            var cors = new EnableCorsAttribute("http://localhost:44386", "Content-Type", "GET, PATCH, POST, OPTIONS", "*") { SupportsCredentials = true };
+            config.EnableCors(cors);
+
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

@@ -8,28 +8,35 @@
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<div id="showMessage"></div>
+<div id="message">message should display here</div>
 
 @section scripts{
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
-    <script src="https://localhost:44390/signalr/hubs"></script>
+    @*<script src="/signalr/hubs"></script>*@
+
     <script type="text/javascript">
+        var SignalrConnection;
+        var HubProxy;
 
-        $(function () {
-            var hubNotify = $.connection.messageHub;
-
-            $.connection.hub.start().done(function () {
-                getAll();
+        function Connect() {
+            HubServerUrl = "https://localhost:44390/";
+            var HubUrl = HubServerUrl + "signalr";
+            //This will hold the connection to the signalr hub   
+            SignalrConnection = $.hubConnection(HubUrl, {
+                useDefaultPath: false
             });
+            HubProxy = SignalrConnection.createHubProxy('MessageHub');
+            //connecting the client to the signalr hub   
+            SignalrConnection.start().done(function () {
+                console.log('Now connected, connection ID=' + connection.id);
+                alert("Connected to Signalr Server");
+                //$('#message').val(message);
+            })
+                .fail(function () {
+                    alert("failed in connecting to the signalr server");
+                })
+        } 
 
-            hubNotify.client.refreshEmployeeData = function () {
-                getAll();
-            };
-        });
-
-        function getAll() {
-            var model = $('#showMessage');
-            $model.empty().append("test");
-        }
+        Connect();
     </script>
 }
