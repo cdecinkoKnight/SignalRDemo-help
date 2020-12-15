@@ -2,6 +2,7 @@
 using SignalRDemo.Domain.Services;
 using SignalRDemo.Hubs;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace SignalRDemo.Controllers
 {
@@ -18,6 +19,7 @@ namespace SignalRDemo.Controllers
 
 
         // GET api/values
+        [EnableCors(origins: "https://localhost:44386", headers: "*", methods: "*")]
         [HttpGet]
         public string Get()
         {

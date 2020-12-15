@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo", "SignalRDemo\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.Domain", "SignalRDemo.Domain\SignalRDemo.Domain.csproj", "{015CBD30-2B56-4117-8DBE-8B9F4A220EAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{6C84A851-8C8C-4C65-A8EF-9FA339AE2699}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{015CBD30-2B56-4117-8DBE-8B9F4A220EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{015CBD30-2B56-4117-8DBE-8B9F4A220EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{015CBD30-2B56-4117-8DBE-8B9F4A220EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C84A851-8C8C-4C65-A8EF-9FA339AE2699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C84A851-8C8C-4C65-A8EF-9FA339AE2699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C84A851-8C8C-4C65-A8EF-9FA339AE2699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C84A851-8C8C-4C65-A8EF-9FA339AE2699}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
