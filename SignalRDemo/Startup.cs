@@ -6,7 +6,9 @@ using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Owin;
 using SignalRDemo;
+using SignalRDemo.Domain.Hubs;
 using SignalRDemo.Domain.Services;
+using SignalRDemo.Hubs;
 using System.Reflection;
 using System.Web.Http;
 
@@ -26,6 +28,7 @@ namespace SignalRDemo
             builder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>().SingleInstance();
             builder.RegisterType<ConnectionManager>().As<IConnectionManager>().SingleInstance();
             builder.RegisterType<SampleService>().As<ISampleService>().InstancePerLifetimeScope();
+            builder.RegisterType<MessageBroker>().As<IMessageBroker>();
 
             var container = builder.Build();
 

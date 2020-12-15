@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hubs\IMessageBroker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISampleService.cs" />
     <Compile Include="Services\SampleService.cs" />
