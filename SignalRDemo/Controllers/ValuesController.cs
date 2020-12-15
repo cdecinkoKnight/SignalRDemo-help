@@ -1,27 +1,30 @@
 ﻿using Microsoft.AspNet.SignalR.Infrastructure;
+using SignalRDemo.Domain.Services;
 using SignalRDemo.Hubs;
-using System.Collections.Generic;
 using System.Web.Http;
 
 namespace SignalRDemo.Controllers
 {
     public class ValuesController : ApiController
     {
+        private readonly ISampleService _sampleService;
         private IConnectionManager _connectionManager;
 
-        public ValuesController(IConnectionManager connectionManager)
+        public ValuesController(ISampleService sampleService, IConnectionManager connectionManager)
         {
+            _sampleService = sampleService;
             _connectionManager = connectionManager;
         }
 
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
             var context = _connectionManager.GetHubContext<MessageHub>();
             context.Clients.All.showMessageOnPage("From controller");
 
-            return new string[] { "value1", "value2" };
+            return _sampleService.GetDummyValue();
         }
     }
 }
