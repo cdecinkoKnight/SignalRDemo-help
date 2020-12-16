@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNet.SignalR.Infrastructure;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using SignalRDemo.Domain.Services;
 using SignalRDemo.Hubs;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace SignalRDemo.Controllers
 {

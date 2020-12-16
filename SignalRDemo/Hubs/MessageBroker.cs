@@ -11,7 +11,6 @@ namespace SignalRDemo.Hubs
         public MessageBroker(IConnectionManager connectionManager)
         {
             Debug.WriteLine("MessageBroker");
-
             _connectionManager = connectionManager;
         }
 
@@ -20,9 +19,6 @@ namespace SignalRDemo.Hubs
             Debug.WriteLine("Message Broker: " + message);
 
             var context = _connectionManager.GetHubContext<MessageHub>();
-            //var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-
-            // Use Hub Context and send message
             context.Clients.All.showMessageOnPage(message);
         }
     }

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using SignalRDemo.Domain.Hubs;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SignalRDemo.Hubs
 {
     [HubName("messages")]
-    public class MessageHub : Hub
+    public class MessageHub : Hub, IMessageBroker
     {
         public override Task OnConnected()
         {

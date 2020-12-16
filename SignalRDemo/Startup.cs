@@ -38,12 +38,8 @@ namespace SignalRDemo
 
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-            // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
-            // and finally the standard Web API middleware.
             app.UseAutofacMiddleware(container);
             app.UseCors(CorsOptions.AllowAll);
-            //app.UseAutofacWebApi(config);
-            //app.UseWebApi(config);
 
             app.Map("/signalr", map =>
             {
@@ -56,10 +52,6 @@ namespace SignalRDemo
                 };
                 hubConfiguration.EnableDetailedErrors = true;
                 hubConfiguration.EnableJavaScriptProxies = true;
-                //hubConfiguration.EnableJSONP = true;
-
-                //var hubPipeline = hubConfiguration.Resolver.Resolve<IHubPipeline>();
-                //hubPipeline.AddModule(new LoggingPipelineModule());
 
                 map.RunSignalR(hubConfiguration);
             });

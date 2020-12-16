@@ -22,13 +22,13 @@
             HubServerUrl = "https://localhost:44390/";
             var HubUrl = HubServerUrl + "signalr";
             connection = $.hubConnection(HubUrl, {useDefaultPath: false});
+            connection.logging = true;
 
             proxy = connection.createHubProxy('messages');
             proxy.on('showMessageOnPage', function (message) {
                 alert(message);
                 console.log(message);
             });
-
 
             //connecting the client to the signalr hub   
             connection.start().done(function () {
@@ -45,8 +45,20 @@
             })
                 .fail(function () {
                     alert("failed in connecting to the signalr server");
-            })
+                })
 
+            connection.connectionSlow(function () {
+                alert('We are currently experiencing difficulties with the connection.');
+            });
+            connection.disconnected(function () {
+                alert('SignalR disconnected.');
+                setTimeout(function () {
+                    connection.start();
+                }, 5000); // Re-start connection after 5 seconds
+            });
+            connection.error(function (error) {
+                alert('SignalR error: ' + error)
+            });
         } 
 
         Connect();
