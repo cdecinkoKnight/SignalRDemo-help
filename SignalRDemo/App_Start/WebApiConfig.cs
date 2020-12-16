@@ -12,6 +12,8 @@ namespace SignalRDemo
 
             config.MapHttpAttributeRoutes();
 
+            config.Routes.IgnoreRoute("signalr", "signalr/{*pathInfo}");
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

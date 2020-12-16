@@ -28,7 +28,7 @@
             HubProxy = SignalrConnection.createHubProxy('MessageHub');
             //connecting the client to the signalr hub   
             SignalrConnection.start().done(function () {
-                console.log('Now connected, connection ID=' + connection.id);
+                console.log('Now connected, connection ID=' + SignalrConnection.id);
                 alert("Connected to Signalr Server");
                 //$('#message').val(message);
             })
