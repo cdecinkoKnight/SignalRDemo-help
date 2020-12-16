@@ -12,29 +12,41 @@
 
 @section scripts{
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
-    @*<script src="/signalr/hubs"></script>*@
+    @*<script src="~/signalr/hubs"></script>*@
 
     <script type="text/javascript">
-        var SignalrConnection;
-        var HubProxy;
+        var connection;
+        var proxy;
 
         function Connect() {
             HubServerUrl = "https://localhost:44390/";
             var HubUrl = HubServerUrl + "signalr";
-            //This will hold the connection to the signalr hub   
-            SignalrConnection = $.hubConnection(HubUrl, {
-                useDefaultPath: false
+            connection = $.hubConnection(HubUrl, {useDefaultPath: false});
+
+            proxy = connection.createHubProxy('messages');
+            proxy.on('showMessageOnPage', function (message) {
+                alert(message);
+                console.log(message);
             });
-            HubProxy = SignalrConnection.createHubProxy('MessageHub');
+
+
             //connecting the client to the signalr hub   
-            SignalrConnection.start().done(function () {
-                console.log('Now connected, connection ID=' + SignalrConnection.id);
+            connection.start().done(function () {
+                console.log('Now connected, connection ID = ' + connection.id);
+                console.log("Transport = " + connection.transport.name);
                 alert("Connected to Signalr Server");
-                //$('#message').val(message);
+
+                proxy.invoke('ShowNewMessage', 'Hello from the UI')
+                    .done(function () {
+                        console.log('Invocation of showMessageOnPage succeeded');
+                    }).fail(function (error) {
+                        console.log('Invocation of showMessageOnPage failed. Error: ' + error);
+                    });
             })
                 .fail(function () {
                     alert("failed in connecting to the signalr server");
-                })
+            })
+
         } 
 
         Connect();
