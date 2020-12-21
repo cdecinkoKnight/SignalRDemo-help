@@ -24,9 +24,18 @@ namespace SignalRDemo
     {
         public void Configuration(IAppBuilder app)
         {
+            var config = new HttpConfiguration();
+            config.MapHttpAttributeRoutes();
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "v1/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
             var builder = new ContainerBuilder();
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterWebApiFilterProvider(config);
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
             builder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>().SingleInstance();
@@ -35,11 +44,14 @@ namespace SignalRDemo
             builder.RegisterType<MessageBroker>().As<IMessageBroker>();
 
             var container = builder.Build();
-
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             app.UseAutofacMiddleware(container);
+
+            app.UseAutofacWebApi(config);
             app.UseCors(CorsOptions.AllowAll);
+            SwaggerConfig.Register(config);
+            app.UseWebApi(config);
 
             app.Map("/signalr", map =>
             {
