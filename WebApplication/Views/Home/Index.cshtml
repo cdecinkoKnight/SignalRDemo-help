@@ -8,7 +8,8 @@
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<div id="message">message should display here</div>
+<div id="cMessage">controller message should display here</div>
+<div id="sMessage">service message should display here</div>
 
 @section scripts{
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
@@ -21,16 +22,22 @@
         function Connect() {
             HubServerUrl = "https://localhost:44390/";
             var HubUrl = HubServerUrl + "signalr";
-            connection = $.hubConnection(HubUrl, {useDefaultPath: false});
+            connection = $.hubConnection(HubUrl, { useDefaultPath: false });
             connection.logging = true;
 
             proxy = connection.createHubProxy('messages');
-            proxy.on('showMessageOnPage', function (message) {
-                alert(message);
+            proxy.on('showControllerMessageOnPage', function (message) {
+                //alert(message);
                 console.log(message);
+                $("#cMessage").html(message);
+            });
+            proxy.on('showServiceMessageOnPage', function (message) {
+                //alert(message);
+                console.log(message);
+                $("#sMessage").html(message);
             });
 
-            //connecting the client to the signalr hub   
+            //connecting the client to the signalr hub
             connection.start().done(function () {
                 console.log('Now connected, connection ID = ' + connection.id);
                 console.log("Transport = " + connection.transport.name);
@@ -59,7 +66,7 @@
             connection.error(function (error) {
                 alert('SignalR error: ' + error)
             });
-        } 
+        }
 
         Connect();
     </script>

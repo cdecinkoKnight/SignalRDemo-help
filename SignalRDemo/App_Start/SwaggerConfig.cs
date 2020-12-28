@@ -1,7 +1,5 @@
-using System.Web.Http;
-using WebActivatorEx;
-using SignalRDemo;
 using Swashbuckle.Application;
+using System.Web.Http;
 
 //[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 

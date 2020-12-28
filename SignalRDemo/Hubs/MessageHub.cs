@@ -19,7 +19,7 @@ namespace SignalRDemo.Hubs
         {
             Debug.WriteLine("Show New Message: " + message);
 
-            Clients.All.showMessageOnPage("Show New Message: " + message);
+            Clients.All.showControllerMessageOnPage("Show New Message: " + message);
         }
     }
 }

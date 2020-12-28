@@ -1,4 +1,5 @@
 ﻿using SignalRDemo.Domain.Hubs;
+using System;
 
 namespace SignalRDemo.Domain.Services
 {
@@ -13,7 +14,7 @@ namespace SignalRDemo.Domain.Services
 
         public string GetDummyValue()
         {
-            _messageBroker.ShowNewMessage("From Service");
+            _messageBroker.ShowNewMessage("From Service: " + DateTime.Now);
 
             return "dummy value";
         }

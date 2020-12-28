@@ -2,6 +2,7 @@
 using Microsoft.AspNet.SignalR.Infrastructure;
 using SignalRDemo.Domain.Services;
 using SignalRDemo.Hubs;
+using System;
 using System.Web.Http;
 
 namespace SignalRDemo.Controllers
@@ -11,10 +12,10 @@ namespace SignalRDemo.Controllers
         private readonly ISampleService _sampleService;
         private IConnectionManager _connectionManager;
 
-        public ValuesController(ISampleService sampleService, IConnectionManager connectionManager)
+        public ValuesController(ISampleService sampleService, HubConfiguration hubConfiguration)
         {
             _sampleService = sampleService;
-            _connectionManager = connectionManager;
+            _connectionManager = hubConfiguration.Resolver.Resolve<IConnectionManager>();
         }
 
 
@@ -23,7 +24,8 @@ namespace SignalRDemo.Controllers
         public string Get()
         {
             var context = _connectionManager.GetHubContext<MessageHub>();
-            context.Clients.All.showMessageOnPage("From controller");
+
+            context.Clients.All.showControllerMessageOnPage("From controller: " + DateTime.Now);
 
             return _sampleService.GetDummyValue();
         }

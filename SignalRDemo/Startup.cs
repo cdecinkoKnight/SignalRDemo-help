@@ -2,7 +2,6 @@
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
@@ -25,11 +24,12 @@ namespace SignalRDemo
         public void Configuration(IAppBuilder app)
         {
             var config = new HttpConfiguration();
+            //config.Routes.IgnoreRoute("signalr", "signalr/{*pathInfo}");
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "v1/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                "DefaultApi",
+                "v1/{controller}/{id}",
+                new { id = RouteParameter.Optional }
             );
 
             var builder = new ContainerBuilder();
@@ -38,35 +38,39 @@ namespace SignalRDemo
             builder.RegisterWebApiFilterProvider(config);
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>().SingleInstance();
-            builder.RegisterType<ConnectionManager>().As<IConnectionManager>().SingleInstance();
+            //builder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>().SingleInstance();
+            //builder.RegisterType<ConnectionManager>().As<IConnectionManager>();
             builder.RegisterType<SampleService>().As<ISampleService>().InstancePerLifetimeScope();
             builder.RegisterType<MessageBroker>().As<IMessageBroker>();
+
+            HubConfiguration hubConfig = new HubConfiguration();
+            builder.RegisterInstance(hubConfig);
 
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             app.UseAutofacMiddleware(container);
-
             app.UseAutofacWebApi(config);
             app.UseCors(CorsOptions.AllowAll);
             SwaggerConfig.Register(config);
             app.UseWebApi(config);
 
+
             app.Map("/signalr", map =>
             {
                 map.UseCors(SignalrCorsOptions.Value);
                 map.UseAutofacMiddleware(container);
-
-                var hubConfiguration = new HubConfiguration
-                {
-                    Resolver = new AutofacDependencyResolver(container),
-                };
-                hubConfiguration.EnableDetailedErrors = true;
-                hubConfiguration.EnableJavaScriptProxies = true;
-
-                map.RunSignalR(hubConfiguration);
+                hubConfig.Resolver = new AutofacDependencyResolver(container);
+                hubConfig.EnableDetailedErrors = true;
+                hubConfig.EnableJavaScriptProxies = true;
+                map.RunSignalR(hubConfig);
             });
+
+            //AreaRegistration.RegisterAllAreas();
+            //GlobalConfiguration.Configure(WebApiConfig.Register);
+            //FilterConfig.RegisterGlobalFilters(System.Web.Mvc.GlobalFilters.Filters);
+            //RouteConfig.RegisterRoutes(RouteTable.Routes);
+
         }
 
         private static readonly Lazy<CorsOptions> SignalrCorsOptions = new Lazy<CorsOptions>(() =>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.SignalR.Infrastructure;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using SignalRDemo.Domain.Hubs;
 using System.Diagnostics;
 
@@ -8,10 +9,10 @@ namespace SignalRDemo.Hubs
     {
         private readonly IConnectionManager _connectionManager;
 
-        public MessageBroker(IConnectionManager connectionManager)
+        public MessageBroker(HubConfiguration hubConfiguration)
         {
             Debug.WriteLine("MessageBroker");
-            _connectionManager = connectionManager;
+            _connectionManager = hubConfiguration.Resolver.Resolve<IConnectionManager>();
         }
 
         public void ShowNewMessage(string message)
@@ -19,7 +20,7 @@ namespace SignalRDemo.Hubs
             Debug.WriteLine("Message Broker: " + message);
 
             var context = _connectionManager.GetHubContext<MessageHub>();
-            context.Clients.All.showMessageOnPage(message);
+            context.Clients.All.showServiceMessageOnPage(message);
         }
     }
 }
